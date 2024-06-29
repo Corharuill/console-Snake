@@ -18,6 +18,7 @@ struct Variables
 	};
 	Direction dir;
 };
+Variables peremen;
 
 void gotoxy(int x, int y)
 {
@@ -29,20 +30,20 @@ void gotoxy(int x, int y)
 
 void Draw()
 {
-	for (size_t x = 0; x <= 20; x++)
+	for (size_t x = 0; x <= peremen.HEIGHT ; x++)
 	{
 
-		for (size_t y = 0; y <= 20; y++)
+		for (size_t y = 0; y <= peremen.WIDTH; y++)
 		{
 			if (y == 0)
 				std::cout << "#";
-			else if (y == 20)
+			else if (y == peremen.WIDTH)
 				std::cout << "#";
-			else if (x == 0 && y != 20)
-				std::cout << "*";
-			else if (x == 20 && y != 20)
-				std::cout << "*";
-			else if (y != 0 && y != 20)
+			else if (x == 0 && y != peremen.WIDTH)
+				std::cout << "#";
+			else if (x == peremen.HEIGHT && y != peremen.WIDTH)
+				std::cout << "#";
+			else if (y != 0 && y != peremen.WIDTH)
 				std::cout << "-";
 
 			if (x == 10 && y == 10)
