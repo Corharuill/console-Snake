@@ -46,14 +46,28 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+Position getRandPosition()
+{
+	srand(time(0));
+
+	if (peremen.old_pos_food.x != peremen.HEIGHT && peremen.old_pos_food.y != peremen.WIDTH
+		&& peremen.old_pos_food.x != 0 && peremen.old_pos_food.y != 0)
+	{
+		peremen.old_pos_food.x = rand() % peremen.WIDTH;
+		peremen.old_pos_food.y = rand() % peremen.HEIGHT;
+	}
+	return peremen.old_pos_food;
+   
+}
+
 // Стартовые данные
 void Setup()
 {
 	// Стартовыая позиция еды
-	srand(time(0));
-	peremen.old_pos_food.x = rand() % peremen.WIDTH;
-	peremen.old_pos_food.y = rand() % peremen.HEIGHT;
+
+	peremen.old_pos_food = getRandPosition();
 	// Стартовая позиция персонажа
+
 	peremen.pos_snake.x = rand() % peremen.WIDTH;
 	peremen.pos_snake.y = rand() % peremen.HEIGHT;
 
@@ -148,6 +162,8 @@ void Logic()
 // Главный метод
 int main()
 {
+	
+
 	Setup();
 	while (true)
 	{
