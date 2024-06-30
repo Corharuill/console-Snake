@@ -1,17 +1,25 @@
 ﻿#include <iostream>
 #include <conio.h>
 #include <Windows.h>
-struct Position {
-	int x=0, y=0;
+
+ //Структура Позиция.
+ //Используется для обозначения координат в пространстве для разных объектов.
+ //Position pos;
+ //pos.x = 1
+struct Position 
+{
+	int x = 0;
+	int y = 0;
 };
-	
+
+// Структура Переменные
 struct Variables
 {
-	bool      game_over;
-	const int WIDTH = 20;
-	const int HEIGHT = 20;
-	int score = 0;
-	bool hungary = false;
+	bool     game_over;
+	const    int WIDTH  = 20;
+	const    int HEIGHT = 20;
+	int      score      = 0;
+	bool     hungary    = false;
 	Position pos_snake;
 	Position pos_food;
 
@@ -25,8 +33,10 @@ struct Variables
 	};
 	Direction dir;
 };
+
 Variables peremen;
 
+// Вспомогаетльный метод для перемещения корретки курсора в консоли в заданные координаты
 void gotoxy(int x, int y)
 {
 	COORD coord;
@@ -35,6 +45,7 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+// Метод отрисовки
 void Draw()
 {
 	for (size_t y = 0; y <= peremen.HEIGHT ; y++)
@@ -74,26 +85,27 @@ void Draw()
 	}
 }
 
+// Метод ввода-вывода (нажати клавиш)
 void Input()
 {
 
 }
 
+// Метод отвечающий за игровую логику
 void Logic()
 {
 
 }
 
+
+// Главный метод
 int main()
 {
 	Position pos;
-	
-	
 
 	while (true)
 	{
 		Draw();
-		//system("cls");
 		gotoxy(22, 0);
 		
 		std::cout << "SCORE:" << peremen.score;
@@ -118,8 +130,6 @@ int main()
 				if (peremen.dir != Variables::LEFT)
 					peremen.dir = Variables::RIGHT;
 				break;
-				
-
 			}
 			switch (peremen.dir)
 			{
@@ -139,7 +149,6 @@ int main()
 		}
 		
 	}
-	
 	
 	Input();
 	Logic();
