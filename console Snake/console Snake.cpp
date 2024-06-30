@@ -21,7 +21,8 @@ struct Variables
 	int      score      = 0;
 	bool     hungary    = false;
 	Position pos_snake;
-	Position pos_food;
+	Position old_pos_food;
+	Position new_pos_food;
 
 	enum  Direction
 	{
@@ -45,6 +46,19 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+// Стартовые данные
+void Setup()
+{
+	// Стартовыая позиция еды
+	srand(time(0));
+	peremen.old_pos_food.x = rand() % peremen.WIDTH;
+	peremen.old_pos_food.y = rand() % peremen.HEIGHT;
+	// Стартовая позиция персонажа
+	peremen.pos_snake.x = rand() % peremen.WIDTH;
+	peremen.pos_snake.y = rand() % peremen.HEIGHT;
+
+}
+
 // Метод отрисовки
 void Draw()
 {
@@ -53,6 +67,7 @@ void Draw()
 
 		for (size_t x = 0; x <= peremen.WIDTH; x++)
 		{
+			// отрисовка краев карты
 			if (y == 0)
 				std::cout << "1";
 			else if (y == peremen.WIDTH)
@@ -64,9 +79,11 @@ void Draw()
 			else if (y != 0 && y != peremen.WIDTH)
 				std::cout << " ";
 			
-			if (x == rand() % 5 && y == rand() % 5 && peremen.hungary == true) {
+			// отрисовка еды
+			if (x == peremen.old_pos_food.x && y == peremen.old_pos_food.y) 
+			{
 				gotoxy(x, y);
-				std::cout << "*";
+				std::cout << "F";
 			}
 
 			if (x == peremen.pos_snake.x && y == peremen.pos_snake.y)
@@ -75,12 +92,13 @@ void Draw()
 				std::cout << "@";
 			}
 
-			if (peremen.pos_food.x == peremen.pos_snake.x && peremen.pos_food.y == peremen.pos_snake.y) {
+			if (peremen.old_pos_food.x == peremen.pos_snake.x && 
+				peremen.old_pos_food.y == peremen.pos_snake.y) 
+			{
 				peremen.score++;
 				peremen.hungary = true;
 			}
 		}
-
 		std::cout << std::endl;
 	}
 }
@@ -88,21 +106,49 @@ void Draw()
 // Метод ввода-вывода (нажати клавиш)
 void Input()
 {
+	switch (_getch())
+	{
+	case 'w':
+			peremen.dir = Variables::UP;
+		break;
+	case 'a':
+			peremen.dir = Variables::LEFT;
+		break;
+	case 's':
+			peremen.dir = Variables::DOWN;
+		break;
+	case 'd':
+			peremen.dir = Variables::RIGHT;
+		break;
+	}
 
 }
 
 // Метод отвечающий за игровую логику
 void Logic()
 {
-
+	switch (peremen.dir)
+	{
+	case Variables::LEFT:
+		peremen.pos_snake.x--;
+		break;
+	case Variables::RIGHT:
+		peremen.pos_snake.x++;
+		break;
+	case Variables::UP:
+		peremen.pos_snake.y--;
+		break;
+	case Variables::DOWN:
+		peremen.pos_snake.y++;
+		break;
+	}
 }
 
 
 // Главный метод
 int main()
 {
-	Position pos;
-
+	Setup();
 	while (true)
 	{
 		Draw();
@@ -112,46 +158,10 @@ int main()
 		gotoxy(0, 0);
 		if (_kbhit())
 		{
-			switch (_getch())
-			{
-			case 'w':
-				if (peremen.dir  != Variables::DOWN)
-					peremen.dir = Variables::UP;
-				break;
-			case 'a':
-				if (peremen.dir != Variables::RIGHT)
-					peremen.dir = Variables::LEFT;
-				break;
-			case 's':
-				if (peremen.dir != Variables::UP)
-					peremen.dir = Variables::DOWN;
-				break;
-			case 'd':
-				if (peremen.dir != Variables::LEFT)
-					peremen.dir = Variables::RIGHT;
-				break;
-			}
-			switch (peremen.dir)
-			{
-			case Variables::LEFT:
-				peremen.pos_snake.x--;
-				break;
-			case Variables::RIGHT:
-				peremen.pos_snake.x++;
-				break;
-			case Variables::UP:
-				peremen.pos_snake.y--;
-				break;
-			case Variables::DOWN:
-				peremen.pos_snake.y++;
-				break;
-			}
+			Input();
+			Logic();
 		}
-		
 	}
 	
-	Input();
-	Logic();
-
 	return 0;
 }
