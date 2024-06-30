@@ -15,7 +15,7 @@ struct Position
 // Структура Переменные
 struct Variables
 {
-	bool     game_over;
+	bool     game_over    = false;
 	const    int WIDTH    = 20;
 	const    int HEIGHT   = 20;
 	int      score        = 0;
@@ -32,7 +32,7 @@ struct Variables
 		UP,
 		DOWN
 	};
-	Direction dir;
+	Direction dir = STOP;
 };
 
 Variables peremen;
@@ -59,6 +59,13 @@ Position getRandPosition()
 // Стартовые данные
 void Setup()
 {
+	// Извлеки этот участок кода в отдельную функцию hideConsoleCursor();
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO cursorInfo;
+	GetConsoleCursorInfo(hConsole, &cursorInfo);
+	cursorInfo.bVisible = FALSE;
+	SetConsoleCursorInfo(hConsole, &cursorInfo);
+
 	// Стартовыая позиция еды
 	peremen.old_pos_food = getRandPosition();
 
@@ -74,7 +81,7 @@ void Draw()
 	{
 		for (size_t x = 0; x <= peremen.WIDTH; x++)
 		{
-			// отрисовка краев карты
+			// Отрисовка краев карты
 			if (y == 0)
 				std::cout << "1";
 			else if (y == peremen.WIDTH)
@@ -86,24 +93,18 @@ void Draw()
 			else if (y != 0 && y != peremen.WIDTH)
 				std::cout << " ";
 			
-			// отрисовка еды
+			// Отрисовка еды
 			if (x == peremen.old_pos_food.x && y == peremen.old_pos_food.y) 
 			{
 				gotoxy(x, y);
 				std::cout << "F";
 			}
 
+			// Отрисовка персонажа
 			if (x == peremen.pos_snake.x && y == peremen.pos_snake.y)
 			{
 				gotoxy(x, y);
 				std::cout << "@";
-			}
-
-			if (peremen.old_pos_food.x == peremen.pos_snake.x && 
-				peremen.old_pos_food.y == peremen.pos_snake.y) 
-			{
-				peremen.score++;
-				peremen.hungary = true;
 			}
 		}
 		std::cout << std::endl;
@@ -149,6 +150,15 @@ void Logic()
 		peremen.pos_snake.y++;
 		break;
 	}
+
+	if (peremen.old_pos_food.x == peremen.pos_snake.x &&
+		peremen.old_pos_food.y == peremen.pos_snake.y)
+	{
+		peremen.score++;
+		peremen.hungary = true;
+		peremen.old_pos_food = getRandPosition();
+		peremen.hungary = false;
+	}
 }
 
 
@@ -161,7 +171,7 @@ int main()
 		Draw();
 		gotoxy(22, 0);
 		
-		std::cout << "SCORE:" << peremen.score;
+		std::cout << "SCORE:\t" << peremen.score;
 		gotoxy(0, 0);
 		if (_kbhit())
 		{
