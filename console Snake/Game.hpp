@@ -30,19 +30,19 @@ struct Variables
 class Game
 {
 public:
+	void Play(); 
+
+	// Структура Переменные
 	
+	
+private:
 
 	Variables peremen;
 
-	// Структура Переменные
-	Game();
-	~Game();
+	Position getRandPosition();
 	void Input();
 	void Draw();
 	void Setup();
 	void gotoxy(int x, int y);
 	void Logic();
-	Position getRandPosition();
-private:
-
 };

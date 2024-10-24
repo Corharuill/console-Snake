@@ -17,6 +17,24 @@ void Game::gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+void Game::Play()
+{
+	Setup();
+	while (true)
+	{
+		Draw();
+		gotoxy(22, 0);
+
+		std::cout << "SCORE:" << peremen.score;
+		gotoxy(0, 0);
+		if (_kbhit())
+		{
+			Input();
+			Logic();
+		}
+	}
+}
+
 // ¬озвращает рандомно заданные координаты дл€ еды
 // TO DO исправить чтобы возвращал координаты дл€ любого объекта
 Position Game::getRandPosition()
@@ -46,6 +64,7 @@ void Game::Draw()
 	{
 		for (size_t x = 0; x <= peremen.WIDTH; x++)
 		{
+
 			// отрисовка краев карты
 			if (y == 0)
 				std::cout << "1";

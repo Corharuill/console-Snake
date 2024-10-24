@@ -6,19 +6,8 @@
 int main()
 {
 	Game game;
-	game.Setup();
-	while (true)
-	{
-		game.Draw();
-		game.gotoxy(22, 0);
-		
-		std::cout << "SCORE:" << game.peremen.score;
-		game.gotoxy(0, 0);
-		if (_kbhit())
-		{
-			game.Input();
-			game.Logic();
-		}
-	}
+	
+	game.Play();
+	
 	return 0;
 }
